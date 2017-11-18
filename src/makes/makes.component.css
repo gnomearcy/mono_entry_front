@@ -1,0 +1,80 @@
+.content{
+    position: absolute;
+    width: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.title{
+  margin-top: 56px;
+  margin-bottom: 56px;
+  font-size: 38px;
+  color: red;
+  text-align: center;
+}
+
+.create_new {
+  width: 200px;
+  height: 56px;
+  line-height: 56px;
+  background-color: #19E16E;
+  color: white;
+  text-transform: uppercase;
+  font-size: 18px;
+  font-family: "Montserrat";
+  user-select: none;
+  cursor: pointer;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 56px;
+  margin-right: 56px;
+  text-align: center;
+}
+.create_new:hover{
+  background-color: #2ECC71;
+}
+.create_new:active{
+  background-color: #14AD55;
+}
+
+.search {
+  border: 1px solid black;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  float: right;
+  margin-bottom: 28px;
+}
+
+.search input {
+  padding: 0;
+  border: 0px solid transparent;
+  /* Remove default blue outline */
+  outline: none;
+}
+
+table {
+  width: 100%;
+  border: 2px solid black;
+}
+
+table tr th{
+  padding: 10px;
+  font-size: 20px;
+}
+
+table td {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+table tr:not(:first-child):hover {
+  background-color: #ccc;
+}
+
+
+.hidden{
+  display: none;
+}

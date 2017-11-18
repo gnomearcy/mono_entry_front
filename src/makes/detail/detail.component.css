@@ -1,0 +1,79 @@
+.container{
+  position: absolute;
+  background-color: rgba(189, 195, 199, 0.8);
+  width: 100vw;
+  height: 100vh;
+}
+
+.details{
+  padding: 28px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #ecf0f1;
+  border-radius: 8px;
+}
+
+.input_title{
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.input{
+  width: 100%;
+  display: block;
+  outline: none;
+  border: 1px solid black;
+
+  margin-top: 12px;
+  margin-bottom: 12px;
+
+  padding: 4px 0;
+  text-indent: 12px;
+}
+
+.error{
+  color: red;
+  display: block;
+  margin-bottom: 28px;
+}
+
+.btn {
+  float: right;
+  outline: none;
+  border-color: transparent;
+  border-width: 0px;
+  user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  height: 56px;
+  text-transform: uppercase;
+  padding: 20px;
+  color: white;
+  font-family: "Montserrat";
+}
+
+.cancel{
+  background-color: #e74c3c;
+}
+.cancel:hover{
+  background-color: #c0392b;
+}
+.cancel:active{
+  background-color: #AB2213;
+}
+
+.action{
+  background-color: #19E16E;
+  margin-right: 8px;
+}
+
+.action:hover{
+  background-color: #2ECC71;
+}
+
+.action:active{
+  background-color: #14AD55;
+}

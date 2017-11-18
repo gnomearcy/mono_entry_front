@@ -1,0 +1,29 @@
+<div>
+  <div class="content">
+    <h2 class="title">Make administration view</h2>
+    <div class="search">
+      <span class="fa fa-search"></span>
+      <input placeholder="Search"/>
+    </div>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Abreviation</th>
+      </tr>
+      <tr *ngFor="let make of makes;" (click)="openUpdateModal(make)">
+        <td>{{make.name}}</td>
+        <td>{{make.abbreviation}}</td>
+      </tr>
+      <tr *ngIf="!makes || makes.length == 0">
+        <td colspan="2">No data to display</td>
+      </tr>
+    </table>
+  </div>
+  <div class="create_new" (click)="openCreateModal()">Create new</div>
+  <make-details
+    *ngIf="showModal"
+    [data]="selected"
+    (onCancel)="onCancel($event)"
+    (onAction)="onAction($event)">
+    </make-details>
+</div>
