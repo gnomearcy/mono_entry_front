@@ -19,7 +19,11 @@ export class MakesComponent implements OnInit{
   constructor(private service: MakeService) { }
 
   ngOnInit(){
-    this.getMakes();
+    // this.getMakes();
+    this.makes = [
+      new Make("John", "Doe"),
+      new Make("Johness", "Doess")
+    ]
   }
 
   getMakes(): void{

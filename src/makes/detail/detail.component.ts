@@ -31,31 +31,26 @@ export class DetailComponent {
   isUpdate: boolean;
   invalidName: boolean = false;
   invalidAbrv: boolean = false;
+  oldState: Make;
 
   @Output() onCancel = new EventEmitter<any>();
   @Output() onAction = new EventEmitter<Make>();
   @ViewChild('name') nameElement: ElementRef;
   @ViewChild('abrv') abrvElement: ElementRef;
 
-
   constructor(private service: MakeService) { }
 
   ngOnInit(){
-
-    console.log(this.data);
     this.isCreate = this.data == null || this.data == undefined;
+    this.oldState = this.isCreate ? null : Object.assign({}, this.data);
     this.isUpdate = !this.isCreate;
     this.actionString = this.isCreate ? "Create" : "Save";
-    this.data = this.data == null ?  new Make("", "") : this.data;
+    this.data = this.data == null ? new Make("", "") : this.data;
   }
 
   // Performs the modal window action
-  // It either issues a create or update
-  action(){
-    if(this.isCreate){
-      console.log("Creating new Make object")
-      // TODO perform validation
-      // TODO construct the Make object from values
+  // It can end in one of the following scenarios:
+  action() {
       let name = this.nameElement.nativeElement.value.trim();
       let abrv = this.abrvElement.nativeElement.value.trim();
 
@@ -65,23 +60,41 @@ export class DetailComponent {
       if(this.invalidName || this.invalidAbrv){
         return;
       }
-      let newMake = new Make(name, abrv)
-      this.onAction.emit(newMake)
-    }
-    else if(this.isUpdate){
-      this.onAction.emit(this.data);
-    }
-    else{
-      console.error("Unsupported mode");
-      this.onCancel.emit();
-    }
+      if(this.isCreate){
+        // Issue service call
+        let newMake = new Make(name, abrv)
+        this.onAction.emit(newMake)
+      }
+      else{
+
+        // In update mode, two-way binding is in place
+        // Make a deep copy of the data object in case the API call results
+        // in failure. In that case, the original data reference is pointed
+        // to this state and changes are reverted back.
+        let state = Object.assign({}, this.data);
+
+        // TODO Change to real API call
+        // Issue api call
+        let test_api = true;
+        if(test_api){
+          // Success
+          this.onCancel.emit();
+        }
+        else{
+          // Failure
+          this.data = state;
+          this.onCancel.emit();
+        }
+      }
   }
 
-  // Dismisses this modal window
   cancel(){
-    // TODO how to report to parent
-    console.log("canceling")
-    console.log(this.onCancel)
+    // Let the parent know that this component wants to be dismissed
+    try{
+      this.data.name = this.oldState.name;
+      this.data.abbreviation = this.oldState.abbreviation;
+    }
+    catch(ignore) { }
     this.onCancel.emit();
   }
 }

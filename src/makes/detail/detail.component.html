@@ -5,10 +5,10 @@
     </span>
     <input
         #name
-        [(ngModel)]="data.name"
         class="input"
+        [(ngModel)]="data.name"
         placeholder="Name"
-        value="data.name"/>
+        value="{{data.name}}"/>
     <span *ngIf="invalidName" class="error">
       This field is required
     </span>
@@ -17,9 +17,10 @@
     </span>
     <input
         #abrv
-        [(ngModel)]="data.abbreviation"
         class="input"
-        placeholder="Abreviation"/>
+        [(ngModel)]="data.abbreviation"
+        placeholder="Abreviation"
+        value="{{data.abbreviation}}"/>
     <span *ngIf="invalidAbrv" class="error">
       This field is required
     </span>
