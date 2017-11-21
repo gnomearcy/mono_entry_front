@@ -1,5 +1,12 @@
 <div class="container">
   <div class="details">
+    <div
+      *ngIf="isUpdate"
+      class="delete">
+        <span
+          (click)="clickDelete()"
+          class="fa fa-trash"></span>
+    </div>
     <span class="input_title">
       Name
     </span>
@@ -27,12 +34,12 @@
     <button
       class="btn cancel"
       value="Cancel"
-      (click)="cancel()">
+      (click)="clickCancel()">
         Cancel
     </button>
     <button
       class="btn action"
-      (click)="action()">
+      (click)="isCreate ? clickCreate() : clickUpdate()">
         {{actionString}}
     </button>
   </div>

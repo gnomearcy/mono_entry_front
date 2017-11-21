@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Inject } from '@angular/core'
 import { Make } from './data/make.model'
-import { MakeService } from './data/makes.service'
+// import { MakeService } from './data/makes.service'
+import { IMakeService, I_MAKE_SERVICE } from './data/i.makes.service'
 
 @Component({
   selector: 'app-makes',
@@ -16,14 +18,10 @@ export class MakesComponent implements OnInit{
   selected: Make;
   showModal: boolean = false;
 
-  constructor(private service: MakeService) { }
+  constructor(@Inject(I_MAKE_SERVICE) private service: IMakeService) { }
 
   ngOnInit(){
-    // this.getMakes();
-    this.makes = [
-      new Make("John", "Doe"),
-      new Make("Johness", "Doess")
-    ]
+    this.getMakes();
   }
 
   getMakes(): void{
@@ -44,18 +42,52 @@ export class MakesComponent implements OnInit{
   }
 
   // Bindings to the Details component
-  onCancel(){
+  onCanceled(){
     console.log("Child reported CANCEL")
     this.showModal = false;
   }
 
-  onAction(make: Make){
-    console.log("Child reported action")
-    console.log(make)
-    if(this.makes == null){
-      this.makes = [];
+  // onAction(make: Make){
+  //   console.log("Child reported action")
+  //   console.log(make)
+  //   if(this.makes == null){
+  //     this.makes = [];
+  //   }
+  //   this.makes.push(make);
+  //   this.showModal = false;
+  // }
+
+  onCreated(created: Make){
+    console.log("created")
+    console.log(created)
+    this.makes.push(created);
+    this.showModal = false;
+  }
+
+  onUpdated(updated: Make){
+    this.showModal = false;
+  }
+
+  onError(error: string){
+    window.alert("error occured > " + error)
+  }
+
+  onDeleted(deleted: Make){
+
+    console.log("returned from delete")
+    console.log("deleted object >")
+    console.log(deleted)
+    let targetIdx = this.makes.findIndex(function(el: Make){
+      return el.id == deleted.id
+    })
+
+    if(targetIdx !== -1){
+      console.log("index to remove from this.makes >")
+      console.log(targetIdx)
+      this.makes.splice(targetIdx, 1);
+      console.log("after splice")
+      console.log(this.makes)
     }
-    this.makes.push(make);
     this.showModal = false;
   }
 }

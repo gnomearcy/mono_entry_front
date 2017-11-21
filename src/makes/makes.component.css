@@ -3,6 +3,7 @@
     width: 75%;
     left: 50%;
     transform: translateX(-50%);
+    padding-bottom: 112px;
 }
 
 .title{
@@ -21,7 +22,6 @@
   color: white;
   text-transform: uppercase;
   font-size: 18px;
-  font-family: "Montserrat";
   user-select: none;
   cursor: pointer;
   position: fixed;

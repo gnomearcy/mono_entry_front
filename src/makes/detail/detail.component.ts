@@ -5,9 +5,10 @@ import {
   EventEmitter,
   ViewChild,
   OnInit,
+  Inject,
   ElementRef} from '@angular/core';
 import { Make } from '../data/make.model'
-import { MakeService } from '../data/makes.service'
+import { IMakeService, I_MAKE_SERVICE } from '../data/i.makes.service'
 
 // Class that represents a modal window
 // Used to update or create new Make object
@@ -33,12 +34,15 @@ export class DetailComponent {
   invalidAbrv: boolean = false;
   oldState: Make;
 
-  @Output() onCancel = new EventEmitter<any>();
-  @Output() onAction = new EventEmitter<Make>();
+  @Output() reportCancel = new EventEmitter<any>();
+  @Output() reportCreate = new EventEmitter<Make>();
+  @Output() reportDelete = new EventEmitter<any>();
+  @Output() reportUpdate = new EventEmitter<any>();
+  @Output() reportError = new EventEmitter<any>();
   @ViewChild('name') nameElement: ElementRef;
   @ViewChild('abrv') abrvElement: ElementRef;
 
-  constructor(private service: MakeService) { }
+  constructor(@Inject(I_MAKE_SERVICE) private service: IMakeService) { }
 
   ngOnInit(){
     this.isCreate = this.data == null || this.data == undefined;
@@ -48,53 +52,74 @@ export class DetailComponent {
     this.data = this.data == null ? new Make("", "") : this.data;
   }
 
-  // Performs the modal window action
-  // It can end in one of the following scenarios:
-  action() {
-      let name = this.nameElement.nativeElement.value.trim();
-      let abrv = this.abrvElement.nativeElement.value.trim();
+  /*
+    Form validation method.
+    Returns an array of valid values to construct Make object from or
+    null if the form is not valid.
+  */
+  private validate(): any[]{
+    let name = this.nameElement.nativeElement.value.trim();
+    let abrv = this.abrvElement.nativeElement.value.trim();
 
-      this.invalidName = name.length == 0;
-      this.invalidAbrv = abrv.length == 0;
+    this.invalidName = name.length == 0;
+    this.invalidAbrv = abrv.length == 0;
 
-      if(this.invalidName || this.invalidAbrv){
-        return;
-      }
-      if(this.isCreate){
-        // Issue service call
-        let newMake = new Make(name, abrv)
-        this.onAction.emit(newMake)
-      }
-      else{
-
-        // In update mode, two-way binding is in place
-        // Make a deep copy of the data object in case the API call results
-        // in failure. In that case, the original data reference is pointed
-        // to this state and changes are reverted back.
-        let state = Object.assign({}, this.data);
-
-        // TODO Change to real API call
-        // Issue api call
-        let test_api = true;
-        if(test_api){
-          // Success
-          this.onCancel.emit();
-        }
-        else{
-          // Failure
-          this.data = state;
-          this.onCancel.emit();
-        }
-      }
+    if(this.invalidName || this.invalidAbrv){
+      return null;
+    }
+    return {
+      name: name,
+      abrv: abrv
+    }
   }
 
-  cancel(){
-    // Let the parent know that this component wants to be dismissed
-    try{
-      this.data.name = this.oldState.name;
-      this.data.abbreviation = this.oldState.abbreviation;
+  clickCreate(){
+    let values = this.validate();
+    if(values == null){
+      return;
     }
-    catch(ignore) { }
-    this.onCancel.emit();
+    let newMake = new Make(values.name, values.abrv)
+    this.service
+        .createMake(newMake)
+        .then(new_obj => this.reportCreate.emit(new_obj))
+        .catch(error => this.reportError.emit("error while creating new object"))
+  }
+
+  clickUpdate(){
+    let validState = this.validate();
+    if(validState == null) { return; }
+
+    this.service
+        .updateMake(this.data)
+        .then(updated => this.reportUpdate.emit(updated))
+        .catch(error => {
+          this.data = state;
+          this.reportError.emit("Error while updating item");
+        })
+  }
+
+  clickCancel(){
+    if(this.isUpdate){
+      try{
+        // In update mode, the @Input "data" objects' properties are
+        // two-way bound to parents' data collection.
+        // In case the user modifies the properties and cancels the operation
+        // the properties have to be updated from the "data" objects' initial
+        // state to revert the changes back in the parent.
+        // See ngOnInit for how the old state is computed.
+        this.data.name = this.oldState.name;
+        this.data.abbreviation = this.oldState.abbreviation;
+      }
+      catch(ignored){}
+    }
+    this.reportCancel.emit();
+  }
+
+  clickDelete(){
+    this.service
+      .deleteMake(this.data)
+      .then((deleted) => this.reportDelete.emit(deleted))
+      .catch((error) => {this.reportError.emit("error while deleting an object")})
+    }
   }
 }

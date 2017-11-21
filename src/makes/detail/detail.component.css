@@ -1,7 +1,7 @@
 .container{
-  position: absolute;
+  position: fixed;
   background-color: rgba(189, 195, 199, 0.8);
-  width: 100vw;
+  width: 100%;
   height: 100vh;
 }
 
@@ -76,4 +76,17 @@
 
 .action:active{
   background-color: #14AD55;
+}
+
+.delete{
+  text-align: end;
+  margin-bottom: 28px;
+  color: #333;
+}
+
+.delete > span{
+  font-size: 32px;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
 }

@@ -23,7 +23,10 @@
   <make-details
     *ngIf="showModal"
     [data]="selected"
-    (onCancel)="onCancel($event)"
-    (onAction)="onAction($event)">
+    (reportCreate)="onCreated($event)"
+    (reportUpdate)="onUpdated($event)"
+    (reportError)="onError($event)"
+    (reportCancel)="onCanceled($event)"
+    (reportDelete)="onDeleted($event)">
     </make-details>
 </div>

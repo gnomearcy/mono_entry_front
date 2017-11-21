@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core'
 import { Headers, Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { api_getall, api_create, api_update, api_delete } from './api.routes'
 import { Make } from './make.model';
-import { getAll as get_all, create, delete, update } from './api.routes'
+import { IMakeService } from './i.makes.service'
 
 @Injectable()
-export class MakeService{
-  private makeUrl = 'api/makes'
+export class MakeService implements IMakeService{
 
   constructor(private http: Http) { }
 
   getAll(): Promise<Make[]> {
-    console.log(get_all)
+    console.log(api_getall)
     return this.http
-      .get(get_all)
+      .get(api_getall)
       .toPromise()
       .then(response => response.json().data as Make[])
       .catch(this.handleError);
@@ -26,7 +26,7 @@ export class MakeService{
      })
 
      return this.http
-        .put(create, JSON.stringify(make), { headers: headers})
+        .put(api_create, JSON.stringify(make), { headers: headers})
         .toPromise()
         .then(() => make)
         .catch(this.handleError);
@@ -39,7 +39,7 @@ export class MakeService{
     });
 
     return this.http
-       .put(update, JSON.stringify(make), { headers: headers})
+       .put(api_update, JSON.stringify(make), { headers: headers})
        .toPromise()
        .then(() => make)
        .catch(this.handleError);
@@ -50,7 +50,7 @@ export class MakeService{
       'Content-Type': 'application/json'
     });
 
-    let url = `${delete}/${id}`
+    let url = `${api_delete}/${id}`;
     return this.http
       .delete(url, {headers: headers})
       .toPromise()
