@@ -3,14 +3,27 @@
     <h2 class="title">Make administration view</h2>
     <div class="search">
       <span class="fa fa-search"></span>
-      <input placeholder="Search"/>
+      <input
+        #search
+        (keyup)="0"
+        placeholder="Search"/>
     </div>
     <table>
-      <tr>
-        <th>Name</th>
-        <th>Abreviation</th>
+      <tr class="table_head">
+        <th (click)="toggleSortByName()">
+          Name
+          <span class="fa"
+          [class.fa-sort-asc]="sort.nameAsc"
+          [class.fa-sort-desc]="!sort.nameAsc"></span>
+        </th>
+        <th (click)="toggleSortByAbrv()">
+          Abreviation
+          <span class="fa"
+          [class.fa-sort-asc]="sort.abrvAsc"
+          [class.fa-sort-desc]="!sort.abrvAsc"></span>
+        </th>
       </tr>
-      <tr *ngFor="let make of makes;" (click)="openUpdateModal(make)">
+      <tr *ngFor="let make of (makes | searchFilter: search.value | orderBy: sortString)" (click)="openUpdateModal(make)">
         <td>{{make.name}}</td>
         <td>{{make.abbreviation}}</td>
       </tr>

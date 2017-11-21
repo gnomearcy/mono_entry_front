@@ -13,10 +13,17 @@ export class MakesComponent implements OnInit{
   error: any;
   selected: Make;
   showModal: boolean = false;
+  sort = {
+    nameAsc: true,
+    abrvAsc: true
+  };
+
+  sortString: string;
 
   constructor(@Inject(I_MAKE_SERVICE) private service: IMakeService) { }
 
   ngOnInit(){
+    this.sortString = (this.sort.nameAbrv ? '+' : '-') + 'name'
     this.getMakes();
   }
 
@@ -43,6 +50,8 @@ export class MakesComponent implements OnInit{
 
   onCreated(created: Make){
     this.makes.push(created);
+    // Trigger view re-render by re-assigning the reference
+    this.makes = this.makes.slice();
     this.showModal = false;
   }
 
@@ -61,13 +70,32 @@ export class MakesComponent implements OnInit{
   // This method will filter out the deleted object from local collection
   // and reflect changes on UI.
   onDeleted(deleted: Make){
+    console.log("onDeleted")
     let targetIdx = this.makes.findIndex(function(el: Make){
       return el.id == deleted.id
     })
 
+
     if(targetIdx !== -1){
+      console.log("target idx")
+      console.log(targetIdx)
       this.makes.splice(targetIdx, 1);
+      this.makes = this.makes.slice();
+      console.log(this.makes)
     }
     this.showModal = false;
+  }
+
+  // Sorting
+  toggleSortByAbrv(){
+    // Toggle
+    this.sort.abrvAsc = !this.sort.abrvAsc;
+    // Format sorting string
+    this.sortString = (this.sort.abrvAsc ? '+' : '-') + 'abbreviation'
+  }
+
+  toggleSortByName(){
+    this.sort.nameAsc = !this.sort.nameAsc;
+    this.sortString = (this.sort.nameAsc ? '+' : '-') + 'name'
   }
 }

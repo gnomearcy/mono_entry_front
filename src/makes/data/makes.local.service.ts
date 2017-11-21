@@ -98,6 +98,8 @@ export class LocalMakeService implements IMakeService{
 
    deleteMake(objToDelete: Make): Promise<Make>{
      console.log("service delete")
+     console.log("object to delete >")
+     console.log(objToDelete)
      return new Promise((resolve, reject) => {
        let asJson = localStorage.getItem(data_key);
        console.log("json> ")
