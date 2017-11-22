@@ -13,10 +13,6 @@ export class LocalMakeService implements IMakeService{
   constructor(private http: Http) { }
 
   getAll(): Promise<Make[]> {
-    console.log("LocalMakeService - get all")
-    console.log("state of storage >")
-    console.log(localStorage)
-
     return new Promise((resolve) => {
       let asJson = localStorage.getItem(data_key)
       if(asJson == null){
@@ -24,21 +20,7 @@ export class LocalMakeService implements IMakeService{
         resolve([])
         return;
       }
-      console.log("data as JSON:")
-      console.log(asJson)
       let asObj = JSON.parse(asJson);
-      console.log("parsed data:")
-      console.log(asObj);
-
-
-      // const convertedMakes = [];
-      // asObj.forEach((item) => {
-      //   convertedMakes.push(new Make(item as Make));
-      // });
-
-      // console.log("data after conversion:")
-      // console.log(convertedMakes)
-      // resolve(convertedMakes);
       resolve(asObj)
     })
   }
@@ -97,22 +79,14 @@ export class LocalMakeService implements IMakeService{
    }
 
    deleteMake(objToDelete: Make): Promise<Make>{
-     console.log("service delete")
-     console.log("object to delete >")
-     console.log(objToDelete)
      return new Promise((resolve, reject) => {
        let asJson = localStorage.getItem(data_key);
-       console.log("json> ")
-       console.log(asJson)
        if(asJson == null){
          reject("cannot delete something that doesn't exist")
          return;
        }
        let asObj = JSON.parse(asJson);
-       console.log("parsed object")
-       console.log(asObj)
        const ofFirstWithId = function(el: Make) {
-         console.log("iterating for id > " + el.id)
          return el.id == objToDelete.id;
        }
        let targetIdx = asObj.findIndex(ofFirstWithId);
@@ -121,10 +95,8 @@ export class LocalMakeService implements IMakeService{
          reject("no item found to delete")
          return;
        }
-       console.log("deleting index -> " + targetIdx)
        asObj.splice(targetIdx, 1);
        let newJson = JSON.stringify(asObj);
-       console.log(newJson)
        localStorage.setItem(data_key, newJson);
        resolve(objToDelete);
      });

@@ -1,7 +1,17 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div>
+<div [ngSwitch]="currentPage">
   <header class="header">
-    Welcome to {{title}}!
+    <div class="links">
+      <div
+      class="link"
+      [class.current-page]="currentPage === 1"
+      (click)="changePage(1)" class="link">Make</div>
+      <div
+      class="link"
+      [class.current-page]="currentPage === 2"
+      (click)="changePage(2)" >Model</div>
+    </div>
   </header>
-  <app-makes></app-makes>
+  <app-makes *ngSwitchCase="1"></app-makes>
+  <app-models *ngSwitchCase="2"></app-models>
 </div>

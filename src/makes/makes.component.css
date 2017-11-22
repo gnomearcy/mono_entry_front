@@ -78,7 +78,7 @@ table td{
 }
 
 table tr:not(:first-child):hover {
-  background-color: #ccc;
+  background-color: #ecf0f1;
 }
 
 .hidden{

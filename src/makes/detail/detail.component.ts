@@ -122,4 +122,3 @@ export class DetailComponent {
       .catch((error) => {this.reportError.emit("error while deleting an object")})
     }
   }
-}

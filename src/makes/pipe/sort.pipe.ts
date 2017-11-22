@@ -21,16 +21,15 @@ export class OrderBy implements PipeTransform {
     return 0;
   }
 
-  transform(input:any, config: string): any {
+  transform(input:any, sortString: string): any {
 
     if(!Array.isArray(input)) {
       return input;
     }
-
-     let desc = propertyToCheck.substr(0, 1) == '-';
-     var property:string = propertyToCheck.substr(0, 1) == '+' || propertyToCheck.substr(0, 1) == '-'
-       ? propertyToCheck.substr(1)
-       : propertyToCheck;
+     let desc = sortString.substr(0, 1) == '-';
+     var property:string = sortString.substr(0, 1) == '+' || sortString.substr(0, 1) == '-'
+       ? sortString.substr(1)
+       : sortString;
 
      return input.sort(function(a:any,b:any) {
         if(a[property] === undefined || b[property] === undefined){

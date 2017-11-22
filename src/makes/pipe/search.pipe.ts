@@ -6,14 +6,17 @@ import { Make } from '../data/make.model'
 })
 export class SearchFilter implements PipeTransform {
   transform(items: Make[], criteria: any): any {
-    console.log("search filter")
-    console.log(items);
     if(items === undefined){
       return false;
     }
-    return items.filter(item =>{
+    return items.filter(item => {
+
        for (let key in item) {
-         if((""+item[key]).includes(criteria)) {
+         // Don't search id
+         if(key === "id"){
+           continue;
+         }
+         if(("" + item[key]).includes(criteria)) {
             return true;
          }
        }

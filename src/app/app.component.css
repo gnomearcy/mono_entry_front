@@ -14,3 +14,42 @@
   font-size: 27px;
   color: #333;
 }
+
+.links{
+  width:  75%;
+  display: inline-block;
+  height: inherit;
+  text-align: left;
+}
+
+.link{
+  text-transform: uppercase;
+  font-size: 20px;
+  display: inline-block;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: inherit;
+  color: #888;
+}
+
+.link:hover{
+  color: white;
+  background-color: #e74c3c;
+}
+
+.link:active{
+  background-color: #AB2213;
+}
+
+.current-page{
+  color: white;
+  background-color: #e74c3c;
+}
+
+.current-page:hover{
+  background-color: #c0392b;
+}
+
+.current-page:active{
+  background-color: #AB2213;
+}
