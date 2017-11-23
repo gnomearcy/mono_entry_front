@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
-import { MakesComponent } from './makes.component'
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+import { MakesComponent } from './makes.component'
 import { DetailComponent } from './detail/detail.component'
 
-import { IMakeService, I_MAKE_SERVICE } from './data/i.makes.service'
-import { LocalMakeService } from './data/makes.local.service'
-import { MakeService }  from './data/makes.service'
+import { IMakeService, I_MAKE_SERVICE } from './shared/i.makes.service'
+import { LocalMakeService } from './shared/makes.local.service'
+import { MakeService }  from './shared/makes.service'
 
 import { SearchFilter } from './pipe/search.pipe'
 import { OrderBy } from './pipe/sort.pipe';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core'
-import { Make } from './data/make.model'
-import { IMakeService, I_MAKE_SERVICE } from './data/i.makes.service'
+import { Make } from './shared/make.model'
+import { IMakeService, I_MAKE_SERVICE } from './shared/i.makes.service'
 
 @Component({
   selector: 'app-makes',

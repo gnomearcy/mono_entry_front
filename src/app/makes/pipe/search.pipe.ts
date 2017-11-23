@@ -1,5 +1,5 @@
 import { Pipe,PipeTransform} from '@angular/core';
-import { Make } from '../data/make.model'
+import { Make } from '../shared/make.model'
 
 @Pipe({
     name: 'searchFilter'

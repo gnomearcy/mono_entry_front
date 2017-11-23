@@ -7,8 +7,8 @@ import {
   OnInit,
   Inject,
   ElementRef} from '@angular/core';
-import { Make } from '../data/make.model'
-import { IMakeService, I_MAKE_SERVICE } from '../data/i.makes.service'
+import { Make } from '../shared/make.model'
+import { IMakeService, I_MAKE_SERVICE } from '../shared/i.makes.service'
 
 // Class that represents a modal window
 // Used to update or create new Make object
