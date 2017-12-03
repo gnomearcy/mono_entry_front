@@ -54,10 +54,9 @@ export class DetailComponent {
 
   /*
     Form validation method.
-    Returns an array of valid values to construct Make object from or
-    null if the form is not valid.
+    Returns a valid Make object to update
   */
-  private validate(): any[]{
+  private validate(): Make{
     let name = this.nameElement.nativeElement.value.trim();
     let abrv = this.abrvElement.nativeElement.value.trim();
 
