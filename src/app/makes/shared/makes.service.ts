@@ -1,21 +1,33 @@
 import { Injectable } from '@angular/core'
 import { Headers, Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { api_getall, api_create, api_update, api_delete } from './api.routes'
-import { Make } from './make.model';
+import { api_create, api_update, api_delete, api_make_page } from './api.routes'
+import Make from './make.model'
 import { IMakeService } from './i.makes.service'
+import MakePageDto from './dto/make.page.dto'
 
 @Injectable()
 export class MakeService implements IMakeService{
 
   constructor(private http: Http) { }
 
-  getAll(): Promise<Make[]> {
-    console.log(api_getall)
+  getPage(pageNumber: number, pageSize: number): Promise<MakePageDto>{
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    })
+
+    let payload = {
+        TargetPage: pageNumber,
+        PageSize: pageSize,
+        SortAsc: true,
+        SortField: 1
+    }
+
     return this.http
-      .get(api_getall)
+      .post(api_make_page, payload,{ headers: headers })
       .toPromise()
-      .then(response => response.json().data as Make[])
+      .then(response => response.json().data as MakePageDto)
+      .then(response => response.Data as Make[])
       .catch(this.handleError);
   }
 

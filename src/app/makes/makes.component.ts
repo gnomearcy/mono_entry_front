@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core'
-import { Make } from './shared/make.model'
+import Make from './shared/make.model'
 import { IMakeService, I_MAKE_SERVICE } from './shared/i.makes.service'
+import MakePageDto from './shared/dto/make.page.dto'
 
 @Component({
   selector: 'app-makes',
@@ -9,28 +10,49 @@ import { IMakeService, I_MAKE_SERVICE } from './shared/i.makes.service'
   styleUrls: ['./makes.component.css']
 })
 export class MakesComponent implements OnInit{
+
+  // Pagination
+  currentPage: number;
+  pageSize: number;
+  numberOfPages: number;
   makes: Make[];
+
   error: any;
+
   selected: Make;
-  showModal: boolean = false;
+  showModal: boolean;
   sort = {
     nameAsc: true,
     abrvAsc: true
   };
-
   sortString: string;
 
   constructor(@Inject(I_MAKE_SERVICE) private service: IMakeService) { }
 
   ngOnInit(){
-    this.sortString = (this.sort.nameAbrv ? '+' : '-') + 'name'
-    this.getMakes();
+    // Initialize default paging parameters
+    this.makes = [];
+    this.currentPage = 1;
+    this.pageSize = 5;
+
+    // These parameters are unknown until the first
+    // data is retrieved from service
+    this.numberOfPages = undefined;
+
+    this.showModal = false;
+    this.sortString = (this.sort.nameAsc ? '+' : '-') + 'name'
+    this.getPage();
   }
 
-  getMakes(): void{
+  getPage(): void{
     this.service
-      .getAll()
-      .then(makes => this.makes = makes)
+      .getPage(this.currentPage, this.pageSize)
+      .then(pagedData => {
+        console.log("got here")
+        console.log(pagedData)
+        this.makes = pagedData.Data;
+        this.numberOfPages = pagedData.PageCount;
+      })
       .catch(error => this.error = error)
   }
 
@@ -49,9 +71,9 @@ export class MakesComponent implements OnInit{
    }
 
   onCreated(created: Make){
-    this.makes.push(created);
-    // Trigger view re-render by re-assigning the reference
-    this.makes = this.makes.slice();
+    console.log("created");
+    this.makes = this.makes.concat(created);
+    this.getPage();
     this.showModal = false;
   }
 
@@ -83,6 +105,7 @@ export class MakesComponent implements OnInit{
       this.makes = this.makes.slice();
       console.log(this.makes)
     }
+    this.getPage();
     this.showModal = false;
   }
 
@@ -97,5 +120,24 @@ export class MakesComponent implements OnInit{
   toggleSortByName(){
     this.sort.nameAsc = !this.sort.nameAsc;
     this.sortString = (this.sort.nameAsc ? '+' : '-') + 'name'
+  }
+
+  // Pagination triggering events
+  onNext(){
+  console.log(this.currentPage)
+    this.currentPage = this.currentPage + 1;
+    console.log("new current page - " + this.currentPage)
+    this.getPage();
+  }
+
+  onPrevious(){
+    this.currentPage = this.currentPage - 1;
+    if(this.currentPage <= 0){
+      console.warn("Attempted to access non-1 page.")
+      this.currentPage = 1;
+    }
+
+    console.log("new current page - " + this.currentPage)
+    this.getPage();
   }
 }

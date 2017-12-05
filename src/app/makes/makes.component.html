@@ -1,12 +1,20 @@
 <div>
   <div class="content">
     <h2 class="title">Make administration view</h2>
-    <div class="search">
-      <span class="fa fa-search"></span>
-      <input
-        #search
-        (keyup)="0"
-        placeholder="Search"/>
+    <div>
+      <table-nav
+      (reportPreviousClick)="onPrevious($event)"
+      (reportNextClick)="onNext($event)"
+      [enablePrevious]="currentPage > 1"
+      [enableNext]="currentPage < numberOfPages"></table-nav>
+
+      <div class="search">
+        <span class="fa fa-search"></span>
+        <input
+          #search
+          (keyup)="0"
+          placeholder="Search"/>
+      </div>
     </div>
     <table>
       <tr class="table_head">

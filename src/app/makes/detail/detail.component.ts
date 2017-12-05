@@ -7,7 +7,7 @@ import {
   OnInit,
   Inject,
   ElementRef} from '@angular/core';
-import { Make } from '../shared/make.model'
+import Make from '../shared/make.model'
 import { IMakeService, I_MAKE_SERVICE } from '../shared/i.makes.service'
 
 // Class that represents a modal window
@@ -66,20 +66,16 @@ export class DetailComponent {
     if(this.invalidName || this.invalidAbrv){
       return null;
     }
-    return {
-      name: name,
-      abrv: abrv
-    }
+    return new Make(name, abrv);
   }
 
   clickCreate(){
-    let values = this.validate();
-    if(values == null){
+    let newObject = this.validate();
+    if(newObject == null){
       return;
     }
-    let newMake = new Make(values.name, values.abrv)
     this.service
-        .createMake(newMake)
+        .createMake(newObject)
         .then(new_obj => this.reportCreate.emit(new_obj))
         .catch(error => this.reportError.emit("error while creating new object"))
   }
@@ -92,7 +88,7 @@ export class DetailComponent {
         .updateMake(this.data)
         .then(updated => this.reportUpdate.emit(updated))
         .catch(error => {
-          this.data = state;
+          this.data = this.oldState;
           this.reportError.emit("Error while updating item");
         })
   }

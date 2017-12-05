@@ -1,0 +1,12 @@
+<div class="nav">
+  <button
+    [disabled]="!enablePrevious"
+    [class.disabled]="!enablePrevious"
+    (click)="clickPrevious()">
+      {{previous}}</button>
+  <button
+    [disabled]="!enableNext"
+    [class.disabled]="!enableNext"
+    (click)="clickNext()">
+      {{next}}</button>
+</div>

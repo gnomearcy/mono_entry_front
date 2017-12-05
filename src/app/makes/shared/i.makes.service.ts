@@ -1,8 +1,9 @@
 import { InjectionToken } from '@angular/core';
-import { Make } from './make.model'
+import Make from './make.model'
+import MakePageDto from './dto/make.page.dto'
 
 export interface IMakeService {
-  getAll: () => Promise<Make[]>,
+  getPage: (pageNumber, pageSize) => Promise<MakePageDto>,
   deleteMake: (Make) => Promise<Make>,
   updateMake: (Make) => Promise<Make>,
   createMake: (Make) => Promise<Make>
