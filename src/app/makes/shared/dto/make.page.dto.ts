@@ -4,7 +4,7 @@ export default class MakePageDto {
   Data: Make[];
   PageNumber: number;
   PageSize: number;
-  PageCount: boolean;
+  PageCount: number;
 
   constructor(data: Make[], pageNumber: number, pageCount: number, pageSize: number){
 

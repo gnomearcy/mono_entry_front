@@ -3,6 +3,7 @@ import { Headers, Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import Make from './make.model'
 import MakePageDto from './dto/make.page.dto'
+import MakeFilterPayload from './dto/make.filter.payload'
 import { IMakeService } from './i.makes.service'
 
 const data_key = "makes";
@@ -11,48 +12,33 @@ const data_key = "makes";
 export class LocalMakeService implements IMakeService{
   constructor(private http: Http) { }
 
-  // Pagination
+  // Local pagination implementation.
+  // It doesn't support sorting.
+  // It doesn't support filtering.
+  // It is merely a demo to showcase various outcomes for paging input parameters.
   getPage(pageNumber: number, pageSize: number): Promise<MakePageDto> {
-
-    console.log("local service getpage > params:")
-    console.log("page number - " + pageNumber + ", pageSize - " + pageSize)
     return new Promise((resolve) => {
       let asJson = localStorage.getItem(data_key)
       if(asJson == null){
-        console.log("nothing in local storage")
         const result = new MakePageDto([], pageNumber, 0, pageSize);
         resolve(result)
-        console.log("bad data in storage")
-        console.log(result);
         return;
       }
 
-      // Give us an object from JSON. If this yields an exception, reject part
-      // of the Promise is automatially called.
-      // TODO: test this claim
       var asObj = JSON.parse(asJson);
       var startIndex = (pageNumber - 1) * pageSize;
       const a = Math.ceil(asObj.length / pageSize);
       const b = asObj.length % pageSize == 0 ? 0 : 1;
       const pageCount = Math.ceil(asObj.length / pageSize);
 
-      // TODO clear this
-      console.log("asObj.length -> " + asObj.length)
-      console.log("asObj.length / pageSize -> " + asObj.length/pageSize)
-      console.log("asObj % pageSize -> " + asObj.length % pageSize);
-      console.log("a -> " + a)
-      console.log("b -> " + b)
-
       // Check if we will try to read non-existing objects
       if(startIndex > asObj.length){
         const result = new MakePageDto([], pageNumber, pageCount, pageSize);
         resolve(result)
-        console.log("non existing!")
-        console.log(result);
         return
       }
 
-      console.log("Filtering data for page - " + pageNumber)
+      // Time to filter out items that satisfy calculated range
       var filtered = [];
       var endIndex = Math.min(asObj.length, pageNumber * pageSize);
       for(var i = startIndex; i < endIndex; i++){
@@ -60,9 +46,31 @@ export class LocalMakeService implements IMakeService{
       }
 
       const result = new MakePageDto(filtered, pageNumber, pageCount, pageSize);
-      console.log("data!!!")
-      console.log(result);
       resolve(result)
+    })
+  }
+
+  // This method simulates API method call by accessing local storage structure.
+  // All the items are checked against all attributes of payload and filtered out.
+  // This is a simple showcase that imitates real API call defines in non-local
+  // implementation of IMakeService interface.
+  filter(payload: MakeFilterPayload): Promise<Make[]>{
+    return new Promise((resolve) => {
+      let asJson = localStorage.getItem(data_key)
+      if(asJson == null){
+        resolve([])
+        return
+      }
+
+      let asObj = JSON.parse(asJson)
+      let filtered = []
+      asObj.forEach(function(element){
+        if(element.name.indexOf(payload.name) !== -1 ||
+           element.abreviation.indexOf(payload.abreviation) !== -1) {
+          filtered.push(element)
+        }
+      })
+      resolve(filtered)
     })
   }
 

@@ -7,6 +7,13 @@
       (reportNextClick)="onNext($event)"
       [enablePrevious]="currentPage > 1"
       [enableNext]="currentPage < numberOfPages"></table-nav>
+      <select
+        class="page_sizes_dropdown"
+        (change)="onPageSizeChange($event.target.value)">
+        <option
+          *ngFor="let value of pageSizes"
+          [ngValue]="value">{{value}}</option>
+      </select>
 
       <div class="search">
         <span class="fa fa-search"></span>
@@ -31,7 +38,8 @@
           [class.fa-sort-desc]="!sort.abrvAsc"></span>
         </th>
       </tr>
-      <tr *ngFor="let make of (makes | searchFilter: search.value | orderBy: sortString)" (click)="openUpdateModal(make)">
+      <tr *ngFor="let make of (makes | searchFilter: search.value | orderBy: sortString)"
+          (click)="openUpdateModal(make)">
         <td>{{make.name}}</td>
         <td>{{make.abbreviation}}</td>
       </tr>

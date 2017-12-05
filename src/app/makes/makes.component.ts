@@ -16,7 +16,7 @@ export class MakesComponent implements OnInit{
   pageSize: number;
   numberOfPages: number;
   makes: Make[];
-
+  pageSizes: number[] = [1,5,10];
   error: any;
 
   selected: Make;
@@ -33,7 +33,7 @@ export class MakesComponent implements OnInit{
     // Initialize default paging parameters
     this.makes = [];
     this.currentPage = 1;
-    this.pageSize = 5;
+    this.pageSize = this.pageSizes[0];
 
     // These parameters are unknown until the first
     // data is retrieved from service
@@ -44,12 +44,15 @@ export class MakesComponent implements OnInit{
     this.getPage();
   }
 
+  onPageSizeChange(newPageSize: number){
+    this.pageSize = newPageSize;
+    this.getPage();
+  }
+
   getPage(): void{
     this.service
       .getPage(this.currentPage, this.pageSize)
       .then(pagedData => {
-        console.log("got here")
-        console.log(pagedData)
         this.makes = pagedData.Data;
         this.numberOfPages = pagedData.PageCount;
       })
@@ -71,7 +74,6 @@ export class MakesComponent implements OnInit{
    }
 
   onCreated(created: Make){
-    console.log("created");
     this.makes = this.makes.concat(created);
     this.getPage();
     this.showModal = false;
@@ -82,8 +84,6 @@ export class MakesComponent implements OnInit{
   }
 
   onError(error: string){
-    console.error("Error occurred while deleting Make object");
-    console.error(error);
     this.showModal = false;
   }
 
@@ -92,18 +92,14 @@ export class MakesComponent implements OnInit{
   // This method will filter out the deleted object from local collection
   // and reflect changes on UI.
   onDeleted(deleted: Make){
-    console.log("onDeleted")
     let targetIdx = this.makes.findIndex(function(el: Make){
       return el.id == deleted.id
     })
 
 
     if(targetIdx !== -1){
-      console.log("target idx")
-      console.log(targetIdx)
       this.makes.splice(targetIdx, 1);
       this.makes = this.makes.slice();
-      console.log(this.makes)
     }
     this.getPage();
     this.showModal = false;
@@ -124,20 +120,16 @@ export class MakesComponent implements OnInit{
 
   // Pagination triggering events
   onNext(){
-  console.log(this.currentPage)
     this.currentPage = this.currentPage + 1;
-    console.log("new current page - " + this.currentPage)
     this.getPage();
   }
 
   onPrevious(){
     this.currentPage = this.currentPage - 1;
     if(this.currentPage <= 0){
-      console.warn("Attempted to access non-1 page.")
       this.currentPage = 1;
     }
 
-    console.log("new current page - " + this.currentPage)
     this.getPage();
   }
 }

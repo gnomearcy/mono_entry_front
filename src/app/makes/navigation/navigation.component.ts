@@ -30,12 +30,10 @@ export class TableNavigation implements OnInit{
   }
 
   clickNext(){
-    console.log("clicked next button")
     this.reportNextClick.emit();
   }
 
   clickPrevious(){
-    console.log("clicked previous button")
     this.reportPreviousClick.emit();
   }
 }
